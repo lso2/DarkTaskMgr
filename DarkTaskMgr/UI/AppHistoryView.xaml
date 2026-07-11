@@ -1,0 +1,70 @@
+<UserControl x:Class="DarkTaskMgr.UI.AppHistoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{DynamicResource BgBrush}">
+    <Grid Margin="10,8,10,8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Time-range chips -->
+        <DockPanel Grid.Row="0">
+            <TextBlock x:Name="SinceLabel" DockPanel.Dock="Right" Style="{StaticResource Caption}" VerticalAlignment="Center" Text="" />
+            <StackPanel Orientation="Horizontal">
+                <RadioButton x:Name="ChipToday" Style="{StaticResource Chip}" GroupName="hrange" Content="Today" IsChecked="True" Checked="Range_Checked" />
+                <RadioButton x:Name="ChipWeek"  Style="{StaticResource Chip}" GroupName="hrange" Content="This week" Checked="Range_Checked" />
+                <RadioButton x:Name="ChipMonth" Style="{StaticResource Chip}" GroupName="hrange" Content="This month" Checked="Range_Checked" />
+                <RadioButton x:Name="ChipAll"   Style="{StaticResource Chip}" GroupName="hrange" Content="All time" Checked="Range_Checked" />
+            </StackPanel>
+        </DockPanel>
+
+        <TextBlock Grid.Row="1" Style="{StaticResource H2}" Text="High-usage applications" Margin="2,12,0,2" />
+
+        <WrapPanel x:Name="Cards" Grid.Row="2" Orientation="Horizontal" Margin="0,6,0,4" />
+
+        <TextBlock Grid.Row="3" x:Name="TableCaption" Style="{StaticResource Caption}" Margin="2,8,0,4" Text="ALL APPLICATIONS" />
+
+        <ListView x:Name="List" Grid.Row="4" Style="{StaticResource ListDark}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn x:Name="AName" Width="320" Header="Name">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Image Source="{Binding Icon}" Width="16" Height="16" Margin="6,0,7,0" VerticalAlignment="Center" SnapsToDevicePixels="True" />
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn x:Name="ACpu"  Width="150" Header="CPU time">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding CpuTimeText}" HorizontalAlignment="Right" Margin="0,0,16,0" VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn x:Name="APeak" Width="230" Header="Peak CPU">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding PeakText}" HorizontalAlignment="Right" Margin="0,0,16,0" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn x:Name="AEvents" Width="90" Header="Spikes">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding EventsText}" HorizontalAlignment="Right" Margin="0,0,16,0" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</UserControl>

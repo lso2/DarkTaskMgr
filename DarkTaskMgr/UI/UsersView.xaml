@@ -1,0 +1,61 @@
+<UserControl x:Class="DarkTaskMgr.UI.UsersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{DynamicResource BgBrush}">
+    <UserControl.Resources>
+        <DataTemplate x:Key="URight">
+            <TextBlock Text="{Binding CpuText}" HorizontalAlignment="Right" Margin="0,0,14,0" VerticalAlignment="Center" />
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid Margin="8,4,8,8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Style="{StaticResource Caption}" Margin="6,4,0,8"
+                   Text="Users signed in to this machine and the resources their sessions are using." />
+
+        <ListView x:Name="List" Grid.Row="1" Style="{StaticResource ListDark}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn Width="260" Header="User">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="15" Text="&#xE77B;" Margin="6,0,8,0" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                    <TextBlock Text="{Binding UserName}" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="110" Header="Status" DisplayMemberBinding="{Binding StatusText}" />
+                    <GridViewColumn Width="110" Header="Processes" DisplayMemberBinding="{Binding ProcText}" />
+                    <GridViewColumn Width="100" Header="CPU">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding CpuText}" HorizontalAlignment="Right" Margin="0,0,14,0" VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" Header="Memory">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding MemText}" HorizontalAlignment="Right" Margin="0,0,14,0" VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="110" Header="Disk">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DiskText}" HorizontalAlignment="Right" Margin="0,0,14,0" VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</UserControl>

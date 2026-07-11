@@ -1,0 +1,242 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Base text. Foreground is intentionally not set here so it inherits from each window root,
+         which lets tab and button templates override the color of their own content. -->
+    <Style TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="12.5" />
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+
+    <Style x:Key="H1" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style x:Key="H2" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style x:Key="Value" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style x:Key="BigValue" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontSize" Value="34" />
+        <Setter Property="FontWeight" Value="Light" />
+    </Style>
+    <Style x:Key="Caption" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+    </Style>
+
+    <!-- Card container: equal border on all sides, rounded. -->
+    <Style x:Key="Card" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource PanelBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StrokeBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="14" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+
+    <!-- Title-bar buttons -->
+    <Style x:Key="TitleBarButton" TargetType="Button">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Width" Value="44" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="b" Background="{TemplateBinding Background}" CornerRadius="6">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="b" Property="Background" Value="{DynamicResource HoverOverlay}" />
+                            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="b" Property="Background" Value="{DynamicResource PressOverlay}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="CloseButton" TargetType="Button" BasedOn="{StaticResource TitleBarButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="b" Background="{TemplateBinding Background}" CornerRadius="6">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="b" Property="Background" Value="#FFE05A5A" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Tab strip: active state is a filled pill (no one-sided indicator line). -->
+    <Style x:Key="NavTab" TargetType="RadioButton">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Margin" Value="1,0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="b" Background="Transparent" CornerRadius="6" Padding="13,7">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="b" Property="Background" Value="{DynamicResource HoverOverlay}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="b" Property="Background" Value="#31353D" />
+                            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Buttons -->
+    <Style x:Key="AccentButton" TargetType="Button">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="12.5" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Padding" Value="16,8" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="b" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="Opacity" Value="0.9" /></Trigger>
+                        <Trigger Property="IsPressed" Value="True"><Setter TargetName="b" Property="Opacity" Value="0.78" /></Trigger>
+                        <Trigger Property="IsEnabled" Value="False"><Setter TargetName="b" Property="Opacity" Value="0.4" /></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SubtleButton" TargetType="Button" BasedOn="{StaticResource AccentButton}">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="Background" Value="{DynamicResource PanelAltBrush}" />
+        <Setter Property="FontWeight" Value="Normal" />
+    </Style>
+
+    <!-- Slim dark scrollbar -->
+    <Style TargetType="ScrollBar">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Width" Value="10" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollBar">
+                    <Grid Background="Transparent">
+                        <Track x:Name="PART_Track" IsDirectionReversed="True">
+                            <Track.Thumb>
+                                <Thumb>
+                                    <Thumb.Template>
+                                        <ControlTemplate TargetType="Thumb">
+                                            <Border CornerRadius="4" Background="#4CFFFFFF" Margin="2,0" />
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" Focusable="False" />
+                            </Track.IncreaseRepeatButton>
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0" Focusable="False" />
+                            </Track.DecreaseRepeatButton>
+                        </Track>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Height" Value="10" />
+                            <Setter Property="Width" Value="Auto" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Mini card used in the Performance tab left rail -->
+    <Style x:Key="RailCard" TargetType="RadioButton">
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Margin" Value="0,0,0,6" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="b" Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource StrokeBrush}"
+                            BorderThickness="1" CornerRadius="6" Padding="10">
+                        <ContentPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="b" Property="Background" Value="{DynamicResource PanelAltBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="b" Property="Background" Value="#31353D" />
+                            <Setter TargetName="b" Property="BorderBrush" Value="#525A67" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Range chip: a rounded pill with an equal border, filled neutral gray when selected. -->
+    <Style x:Key="Chip" TargetType="RadioButton">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Margin" Value="0,0,6,0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="b" Background="Transparent" BorderBrush="{DynamicResource StrokeBrush}"
+                            BorderThickness="1" CornerRadius="13" Padding="13,5">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="b" Property="Background" Value="{DynamicResource HoverOverlay}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="b" Property="Background" Value="#31353D" />
+                            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

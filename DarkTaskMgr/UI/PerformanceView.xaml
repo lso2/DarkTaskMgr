@@ -1,0 +1,96 @@
+<UserControl x:Class="DarkTaskMgr.UI.PerformanceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="clr-namespace:DarkTaskMgr.UI"
+             Background="{DynamicResource BgBrush}">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="212" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Left rail: one card per resource -->
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,10,0">
+            <StackPanel>
+                <RadioButton x:Name="RailCpu" Style="{StaticResource RailCard}" GroupName="perf" IsChecked="True" Checked="Rail_Checked">
+                    <Grid>
+                        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                        <DockPanel Grid.Row="0">
+                            <TextBlock Text="CPU" FontSize="13" />
+                            <TextBlock x:Name="CpuVal" Text="--" HorizontalAlignment="Right" Foreground="{DynamicResource TextSecondaryBrush}" />
+                        </DockPanel>
+                        <ui:PerfGraph x:Name="CpuMini" Grid.Row="1" Height="36" Margin="0,7,0,0" />
+                    </Grid>
+                </RadioButton>
+
+                <RadioButton x:Name="RailMem" Style="{StaticResource RailCard}" GroupName="perf" Checked="Rail_Checked">
+                    <Grid>
+                        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                        <DockPanel Grid.Row="0">
+                            <TextBlock Text="Memory" FontSize="13" />
+                            <TextBlock x:Name="MemVal" Text="--" HorizontalAlignment="Right" Foreground="{DynamicResource TextSecondaryBrush}" />
+                        </DockPanel>
+                        <ui:PerfGraph x:Name="MemMini" Grid.Row="1" Height="36" Margin="0,7,0,0" />
+                    </Grid>
+                </RadioButton>
+
+                <RadioButton x:Name="RailDisk" Style="{StaticResource RailCard}" GroupName="perf" Checked="Rail_Checked">
+                    <Grid>
+                        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                        <DockPanel Grid.Row="0">
+                            <TextBlock Text="Disk" FontSize="13" />
+                            <TextBlock x:Name="DiskVal" Text="--" HorizontalAlignment="Right" Foreground="{DynamicResource TextSecondaryBrush}" />
+                        </DockPanel>
+                        <ui:PerfGraph x:Name="DiskMini" Grid.Row="1" Height="36" Margin="0,7,0,0" />
+                    </Grid>
+                </RadioButton>
+
+                <RadioButton x:Name="RailNet" Style="{StaticResource RailCard}" GroupName="perf" Checked="Rail_Checked">
+                    <Grid>
+                        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                        <DockPanel Grid.Row="0">
+                            <TextBlock Text="Network" FontSize="13" />
+                            <TextBlock x:Name="NetVal" Text="--" HorizontalAlignment="Right" Foreground="{DynamicResource TextSecondaryBrush}" />
+                        </DockPanel>
+                        <ui:PerfGraph x:Name="NetMini" Grid.Row="1" Height="36" Margin="0,7,0,0" />
+                    </Grid>
+                </RadioButton>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Detail panel -->
+        <Border Grid.Column="1" Style="{StaticResource Card}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Row="0">
+                    <StackPanel>
+                        <TextBlock x:Name="DetailTitle" Style="{StaticResource H1}" Text="CPU" />
+                        <TextBlock x:Name="DetailSub" Style="{StaticResource Caption}" Text="" />
+                    </StackPanel>
+                    <TextBlock x:Name="DetailValue" Style="{StaticResource BigValue}" Text="--" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                </DockPanel>
+
+                <DockPanel Grid.Row="1" Margin="0,14,0,4">
+                    <TextBlock Text="% Utilization" Style="{StaticResource Caption}" />
+                    <TextBlock Text="100%" Style="{StaticResource Caption}" HorizontalAlignment="Right" />
+                </DockPanel>
+
+                <ui:PerfGraph x:Name="DetailGraph" Grid.Row="2" MinHeight="200" />
+
+                <DockPanel Grid.Row="3" Margin="0,4,0,10">
+                    <TextBlock Text="60 seconds" Style="{StaticResource Caption}" />
+                    <TextBlock Text="0" Style="{StaticResource Caption}" HorizontalAlignment="Right" />
+                </DockPanel>
+
+                <UniformGrid x:Name="StatsPanel" Grid.Row="4" Columns="4" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

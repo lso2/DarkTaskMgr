@@ -1,0 +1,40 @@
+<UserControl x:Class="DarkTaskMgr.UI.DetailsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{DynamicResource BgBrush}">
+    <UserControl.Resources>
+        <DataTemplate x:Key="PidCell">
+            <TextBlock Text="{Binding PidText}" HorizontalAlignment="Right" Margin="0,0,14,0" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+        </DataTemplate>
+        <DataTemplate x:Key="CpuCell">
+            <TextBlock Text="{Binding CpuText}" HorizontalAlignment="Right" Margin="0,0,14,0" VerticalAlignment="Center" />
+        </DataTemplate>
+        <DataTemplate x:Key="MemCell">
+            <TextBlock Text="{Binding MemText}" HorizontalAlignment="Right" Margin="0,0,14,0" VerticalAlignment="Center" />
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ListView x:Name="List" Style="{StaticResource ListDark}" Margin="8,4,8,8"
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListView.View>
+            <GridView AllowsColumnReorder="False">
+                <GridViewColumn x:Name="DName" Width="220" Header="Name">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Image Source="{Binding Icon}" Width="16" Height="16" Margin="6,0,7,0" VerticalAlignment="Center" SnapsToDevicePixels="True" />
+                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn x:Name="DPid"    Width="72"  Header="PID" CellTemplate="{StaticResource PidCell}" />
+                <GridViewColumn x:Name="DStatus" Width="92"  Header="Status" DisplayMemberBinding="{Binding StatusText}" />
+                <GridViewColumn x:Name="DUser"   Width="118" Header="User name" DisplayMemberBinding="{Binding UserName}" />
+                <GridViewColumn x:Name="DCpu"    Width="72"  Header="CPU" CellTemplate="{StaticResource CpuCell}" />
+                <GridViewColumn x:Name="DMem"    Width="112" Header="Memory" CellTemplate="{StaticResource MemCell}" />
+                <GridViewColumn x:Name="DDesc"   Width="300" Header="Description" DisplayMemberBinding="{Binding Description}" />
+            </GridView>
+        </ListView.View>
+    </ListView>
+</UserControl>

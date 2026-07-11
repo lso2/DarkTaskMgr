@@ -1,0 +1,118 @@
+<UserControl x:Class="DarkTaskMgr.UI.ProcessesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="clr-namespace:DarkTaskMgr.UI"
+             Background="{DynamicResource BgBrush}">
+    <UserControl.Resources>
+        <ui:HeatConverter x:Key="Heat" />
+        <ui:LevelToMarginConverter x:Key="Indent" />
+        <BooleanToVisibilityConverter x:Key="BoolVis" />
+
+        <DataTemplate x:Key="HdrLeft">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Caption}" Foreground="{DynamicResource TextSecondaryBrush}" />
+                <TextBlock Text="{Binding SortGlyph}" Margin="4,0,0,0" FontSize="10" Foreground="{DynamicResource TextSecondaryBrush}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="HdrRight">
+            <StackPanel HorizontalAlignment="Right">
+                <TextBlock Text="{Binding PercentText}" FontSize="15.5" FontWeight="SemiBold" HorizontalAlignment="Right"
+                           Foreground="{DynamicResource TextPrimaryBrush}"
+                           Visibility="{Binding HasPercent, Converter={StaticResource BoolVis}}" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Text="{Binding SortGlyph}" Margin="0,0,3,0" FontSize="10" Foreground="{DynamicResource TextSecondaryBrush}" />
+                    <TextBlock Text="{Binding Caption}" Foreground="{DynamicResource TextSecondaryBrush}" />
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="NameCell">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="{Binding Level, Converter={StaticResource Indent}}">
+                <Border Width="16" VerticalAlignment="Center">
+                    <ToggleButton Cursor="Hand" Background="Transparent" Focusable="False"
+                                  Visibility="{Binding ExpanderVisible, Converter={StaticResource BoolVis}}"
+                                  IsChecked="{Binding IsExpanded, Mode=OneWay}" Click="Expander_Click">
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Border Background="Transparent" Padding="2">
+                                    <Path x:Name="a" Width="7" Height="8" Data="M0,0 L7,4 L0,8 Z" Fill="{DynamicResource TextSecondaryBrush}" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="a" Property="Data" Value="M0,0 L8,0 L4,6 Z" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
+                </Border>
+                <Image Source="{Binding Icon}" Width="16" Height="16" VerticalAlignment="Center" Margin="1,0,7,0" SnapsToDevicePixels="True" />
+                <TextBlock Text="{Binding NameText}" VerticalAlignment="Center" Margin="0,0,10,0" TextTrimming="CharacterEllipsis" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="StatusCell">
+            <TextBlock Text="{Binding StatusText}" Foreground="{DynamicResource TextSecondaryBrush}" Margin="10,0" VerticalAlignment="Center" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="CpuCell">
+            <Border Background="{Binding CpuHeat, Converter={StaticResource Heat}}">
+                <TextBlock Text="{Binding CpuText}" HorizontalAlignment="Right" Margin="0,0,12,0" VerticalAlignment="Center" />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="MemCell">
+            <Border Background="{Binding MemHeat, Converter={StaticResource Heat}}">
+                <TextBlock Text="{Binding MemText}" HorizontalAlignment="Right" Margin="0,0,12,0" VerticalAlignment="Center" />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="DiskCell">
+            <Border Background="{Binding DiskHeat, Converter={StaticResource Heat}}">
+                <TextBlock Text="{Binding DiskText}" HorizontalAlignment="Right" Margin="0,0,12,0" VerticalAlignment="Center" />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="NetCell">
+            <Border Background="{Binding NetHeat, Converter={StaticResource Heat}}">
+                <TextBlock Text="{Binding NetText}" HorizontalAlignment="Right" Margin="0,0,12,0" VerticalAlignment="Center" />
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ListView x:Name="List" Style="{StaticResource ListDark}" Margin="8,4,8,8"
+              VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListView.GroupStyle>
+            <GroupStyle>
+                <GroupStyle.ContainerStyle>
+                    <Style TargetType="GroupItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="GroupItem">
+                                    <Expander Style="{StaticResource GroupExpander}" IsExpanded="True">
+                                        <Expander.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" />
+                                                <TextBlock Text="{Binding ItemCount, StringFormat=' ({0})'}" Foreground="{DynamicResource TextMutedBrush}" />
+                                            </StackPanel>
+                                        </Expander.Header>
+                                        <ItemsPresenter />
+                                    </Expander>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </GroupStyle.ContainerStyle>
+            </GroupStyle>
+        </ListView.GroupStyle>
+        <ListView.View>
+            <GridView AllowsColumnReorder="False">
+                <GridViewColumn x:Name="ColName"   Width="320" HeaderTemplate="{StaticResource HdrLeft}"  CellTemplate="{StaticResource NameCell}" />
+                <GridViewColumn x:Name="ColStatus" Width="96"  HeaderTemplate="{StaticResource HdrLeft}"  CellTemplate="{StaticResource StatusCell}" />
+                <GridViewColumn x:Name="ColCpu"    Width="94"  HeaderTemplate="{StaticResource HdrRight}" CellTemplate="{StaticResource CpuCell}" />
+                <GridViewColumn x:Name="ColMem"    Width="112" HeaderTemplate="{StaticResource HdrRight}" CellTemplate="{StaticResource MemCell}" />
+                <GridViewColumn x:Name="ColDisk"   Width="96"  HeaderTemplate="{StaticResource HdrRight}" CellTemplate="{StaticResource DiskCell}" />
+                <GridViewColumn x:Name="ColNet"    Width="100" HeaderTemplate="{StaticResource HdrRight}" CellTemplate="{StaticResource NetCell}" />
+            </GridView>
+        </ListView.View>
+    </ListView>
+</UserControl>
