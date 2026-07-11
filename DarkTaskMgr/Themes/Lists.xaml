@@ -1,5 +1,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="clr-namespace:DarkTaskMgr.UI">
 
     <!-- The dark table used by every tab. ListView + GridView is styled rather than DataGrid because
          it is lighter to theme and gives full control of the row, header, and selection look. -->
@@ -13,6 +14,8 @@
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True" />
         <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling" />
+        <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel" />
+        <Setter Property="ui:ScrollHelper.Smooth" Value="True" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
     </Style>
 

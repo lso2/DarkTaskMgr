@@ -9,7 +9,7 @@
 ; works) so DarkTaskMgr.exe exists, then open this file in Inno Setup and press Compile.
 
 #define MyAppName "DarkTaskMgr"
-#define MyAppVersion "1.0.4"
+#define MyAppVersion "1.1.1"
 #define MyAppPublisher "PlexPixel"
 #define MyAppExe "DarkTaskMgr.exe"
 
@@ -45,6 +45,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Additional shortcuts:"
+Name: "deskmenu"; Description: "Add 'Dark Task Manager' to the desktop right-click menu"; GroupDescription: "Additional shortcuts:"
 
 [Files]
 Source: "DarkTaskMgr\bin\x64\{#Config}\{#MyAppExe}"; DestDir: "{app}"; Flags: ignoreversion
@@ -52,6 +53,13 @@ Source: "DarkTaskMgr\bin\x64\{#Config}\{#MyAppExe}"; DestDir: "{app}"; Flags: ig
 [Icons]
 Name: "{userprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExe}"
 Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExe}"; Tasks: desktopicon
+
+[Registry]
+; Windows does not allow adding items to the taskbar's right-click menu, so this adds a right-click
+; entry to the desktop background instead (per-user, no admin, removed on uninstall).
+Root: HKCU; Subkey: "Software\Classes\DirectoryBackground\shell\DarkTaskMgr"; ValueType: string; ValueData: "Dark Task Manager"; Flags: uninsdeletekey; Tasks: deskmenu
+Root: HKCU; Subkey: "Software\Classes\DirectoryBackground\shell\DarkTaskMgr"; ValueType: string; ValueName: "Icon"; ValueData: "{app}\{#MyAppExe},0"; Tasks: deskmenu
+Root: HKCU; Subkey: "Software\Classes\DirectoryBackground\shell\DarkTaskMgr\command"; ValueType: string; ValueData: """{app}\{#MyAppExe}"""; Tasks: deskmenu
 
 [Run]
 Filename: "{app}\{#MyAppExe}"; Description: "Launch DarkTaskMgr"; Flags: nowait postinstall skipifsilent

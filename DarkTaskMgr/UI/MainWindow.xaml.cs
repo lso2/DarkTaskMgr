@@ -69,10 +69,17 @@ namespace DarkTaskMgr.UI
             _tabs[tab] = view;
         }
 
+        private bool _loadingShown = true;
+
         private void Engine_Updated(object sender, Snapshot snap)
         {
             Dispatcher.BeginInvoke(new Action(() =>
             {
+                if (_loadingShown)
+                {
+                    _loadingShown = false;
+                    LoadingOverlay.Visibility = Visibility.Collapsed;
+                }
                 UpdateStatusBar(snap);
                 (_active as ITabView)?.OnSnapshot(snap);
             }));

@@ -98,7 +98,7 @@ namespace DarkTaskMgr.UI
             foreach (var dead in _byApp.Keys.Where(k => !live.Contains(k)).ToList()) _byApp.Remove(dead);
             ReconcileRows(desired);
 
-            UpdateCards(summaries.Where(s => s.CpuSeconds > 0).Take(6).ToList(), today);
+            UpdateCards(summaries.Where(s => s.CpuSeconds > 0).Take(24).ToList(), today);
 
             SinceLabel.Text = totalEvents + (totalEvents == 1 ? " spike recorded" : " spikes recorded");
             TableCaption.Text = "ALL APPLICATIONS  •  " + RangeLabel(_range);
@@ -124,7 +124,7 @@ namespace DarkTaskMgr.UI
         private CardRefs CreateCard()
         {
             var refs = new CardRefs();
-            var outer = new Border { Style = (Style)FindResource("Card"), Width = 258, Margin = new Thickness(0, 0, 10, 10) };
+            var outer = new Border { Style = (Style)FindResource("Card"), Width = 258, Margin = new Thickness(0, 0, 8, 10) };
             var panel = new StackPanel();
 
             var header = new DockPanel { Margin = new Thickness(0, 0, 0, 10) };

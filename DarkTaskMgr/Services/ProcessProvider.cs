@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Management;
 
 namespace DarkTaskMgr.Services
@@ -157,6 +158,11 @@ namespace DarkTaskMgr.Services
             // whose service reads it with its own privilege. This is what fills the icons for the
             // Intel, audio, and other service processes without needing elevation.
             if (string.IsNullOrEmpty(path)) path = _wmi.Get(pid);
+            // Core Windows processes (winlogon, wininit, services, svchost, and the like) are higher
+            // integrity than a normal-user app and cannot be opened at all, and WMI hides their path
+            // too. They live in System32, so as a last resort the path is guessed from the process
+            // name there, which recovers their icon without elevation.
+            if (string.IsNullOrEmpty(path) && IsSystemish(info.UserName)) path = GuessSystemImage(info.Name);
 
             string desc = "";
             if (!string.IsNullOrEmpty(path))
@@ -197,6 +203,34 @@ namespace DarkTaskMgr.Services
             if (u == "SYSTEM" || u == "LOCAL SERVICE" || u == "NETWORK SERVICE" || u.Length == 0)
                 return "Windows processes";
             return "Background processes";
+        }
+
+        private static bool IsSystemish(string user)
+        {
+            string u = user ?? "";
+            return u.Length == 0 || u == "SYSTEM" || u == "LOCAL SERVICE" || u == "NETWORK SERVICE";
+        }
+
+        // A core system process's image is almost always System32\<name>.exe (or SysWOW64, or the
+        // Windows directory), so this recovers a real file to read the icon from when every other
+        // source was blocked by the process's integrity level.
+        private static string GuessSystemImage(string name)
+        {
+            if (string.IsNullOrEmpty(name) || name == "(unknown)") return "";
+            try
+            {
+                string sys = Environment.GetFolderPath(Environment.SpecialFolder.System);
+                string wow = Environment.GetFolderPath(Environment.SpecialFolder.SystemX86);
+                string win = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+                foreach (var dir in new[] { sys, wow, win })
+                {
+                    if (string.IsNullOrEmpty(dir)) continue;
+                    string cand = Path.Combine(dir, name + ".exe");
+                    if (File.Exists(cand)) return cand;
+                }
+            }
+            catch { }
+            return "";
         }
 
         private static string SafeName(Process p)
@@ -240,12 +274,14 @@ namespace DarkTaskMgr.Services
         private void Refresh()
         {
             _lastRefresh = DateTime.UtcNow;
+            var map = new Dictionary<int, string>();
+
+            // Running-process image paths. Readable for most processes, but null for higher-integrity
+            // ones when the caller is not elevated.
             try
             {
-                var map = new Dictionary<int, string>();
                 using (var searcher = new ManagementObjectSearcher("SELECT ProcessId, ExecutablePath FROM Win32_Process"))
                 using (var results = searcher.Get())
-                {
                     foreach (ManagementObject mo in results)
                     {
                         try
@@ -256,10 +292,48 @@ namespace DarkTaskMgr.Services
                         catch { }
                         finally { mo.Dispose(); }
                     }
-                }
-                _map = map;
             }
-            catch (Exception ex) { Log.Error("wmi image paths", ex); }
+            catch (Exception ex) { Log.Error("wmi process paths", ex); }
+
+            // Service image paths from the service configuration, which is registry-based and readable
+            // without elevation. This fills the icons for third-party services (backup tools, remote
+            // access, vendor helpers) whose running process cannot be opened directly.
+            try
+            {
+                using (var searcher = new ManagementObjectSearcher("SELECT ProcessId, PathName FROM Win32_Service"))
+                using (var results = searcher.Get())
+                    foreach (ManagementObject mo in results)
+                    {
+                        try
+                        {
+                            int pid = Convert.ToInt32(mo["ProcessId"]);
+                            if (pid <= 0) continue;
+                            string exe = ExeFromServicePath(Convert.ToString(mo["PathName"]));
+                            if (!string.IsNullOrEmpty(exe) && (!map.TryGetValue(pid, out string cur) || string.IsNullOrEmpty(cur)))
+                                map[pid] = exe;
+                        }
+                        catch { }
+                        finally { mo.Dispose(); }
+                    }
+            }
+            catch (Exception ex) { Log.Error("wmi service paths", ex); }
+
+            _map = map;
+        }
+
+        private static string ExeFromServicePath(string cmd)
+        {
+            if (string.IsNullOrEmpty(cmd)) return "";
+            cmd = cmd.Trim();
+            if (cmd.StartsWith("\""))
+            {
+                int end = cmd.IndexOf('"', 1);
+                if (end > 1) return cmd.Substring(1, end - 1);
+            }
+            int ext = cmd.IndexOf(".exe", StringComparison.OrdinalIgnoreCase);
+            if (ext > 0) return cmd.Substring(0, ext + 4);
+            int space = cmd.IndexOf(' ');
+            return space > 0 ? cmd.Substring(0, space) : cmd;
         }
     }
 }

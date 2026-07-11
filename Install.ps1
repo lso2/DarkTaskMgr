@@ -53,6 +53,17 @@ $desktop   = Join-Path ([Environment]::GetFolderPath('Desktop')) 'DarkTaskMgr.ln
 New-Shortcut $startMenu $exe
 New-Shortcut $desktop $exe
 
-# 4. Launch now.
+# 4. Add "Dark Task Manager" to the desktop right-click menu (per-user, no admin). Windows does not
+#    allow adding items to the taskbar's own right-click menu, so this is the closest right-click
+#    launch point.
+$menuKey = 'HKCU:\Software\Classes\DirectoryBackground\shell\DarkTaskMgr'
+New-Item -Path $menuKey -Force | Out-Null
+Set-ItemProperty -Path $menuKey -Name '(default)' -Value 'Dark Task Manager'
+Set-ItemProperty -Path $menuKey -Name 'Icon' -Value "$exe,0"
+New-Item -Path "$menuKey\command" -Force | Out-Null
+Set-ItemProperty -Path "$menuKey\command" -Name '(default)' -Value "`"$exe`""
+
+# 5. Launch now.
 Start-Process -FilePath $exe
-Write-Host "Installed to $InstallDir. A shortcut is on your Start Menu and Desktop." -ForegroundColor Green
+Write-Host "Installed to $InstallDir. Shortcuts added to Start Menu and Desktop," -ForegroundColor Green
+Write-Host "and 'Dark Task Manager' added to the desktop right-click menu." -ForegroundColor Green

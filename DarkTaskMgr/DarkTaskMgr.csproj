@@ -79,6 +79,7 @@
     <Compile Include="UI\PerfGraph.cs" />
     <Compile Include="UI\RunDialog.cs" />
     <Compile Include="UI\IconCache.cs" />
+    <Compile Include="UI\ScrollHelper.cs" />
     <Compile Include="UI\ProcessRowModel.cs" />
   </ItemGroup>
   <ItemGroup>
