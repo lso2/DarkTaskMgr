@@ -49,6 +49,8 @@ Name: "deskmenu"; Description: "Add 'Dark Task Manager' to the desktop right-cli
 
 [Files]
 Source: "DarkTaskMgr\bin\x64\{#Config}\{#MyAppExe}"; DestDir: "{app}"; Flags: ignoreversion
+; The GPLv3 text is installed with the program.
+Source: "LICENSE"; DestDir: "{app}"; DestName: "LICENSE.txt"; Flags: ignoreversion
 
 [Icons]
 Name: "{userprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExe}"

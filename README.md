@@ -5,7 +5,7 @@
 ![C#](https://img.shields.io/badge/C%23-7.3-239120.svg?logo=csharp&logoColor=white)
 ![UI](https://img.shields.io/badge/UI-WPF-1f6feb.svg)
 ![Version](https://img.shields.io/badge/Version-1.1.0-success.svg)
-![License](https://img.shields.io/badge/License-MIT-orange.svg)
+![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
 
 A dark-theme Task Manager for Windows 10. DarkTaskMgr reproduces the layout and every tab of the built-in Task Manager in the dark theme Windows 10 never shipped, and refines a few things along the way. It runs locally as a single app, needs no runtime to install because .NET Framework 4.8 ships with Windows, and asks for administrator rights only when an action genuinely needs them.
 
@@ -244,7 +244,9 @@ PlexPixel ([plexpixel.com](https://plexpixel.com))
 
 ## License
 
-MIT, see the [LICENSE](LICENSE) file for details.
+Copyright (C) 2026 PlexPixel
+
+DarkTaskMgr is licensed under the GNU General Public License version 3 (GPL-3.0-only). The full text is in [LICENSE](LICENSE). Sections 15 and 16 of the license disclaim any warranty and limit liability.
 
 ---
 
